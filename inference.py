@@ -1,6 +1,7 @@
 from transformers import pipeline
 from transformers import DistilBertForTokenClassification, DistilBertTokenizerFast
 from constants.constants import unique_tags
+from tabulate import tabulate
 
 # Load the model
 model = DistilBertForTokenClassification.from_pretrained("text_finance_tag")
@@ -13,19 +14,12 @@ nlp = pipeline("ner", model=model, tokenizer=tokenizer)
 # Here's an example using a single sentence:
 
 sentence = "Cash Withdrawal of INR 10,000.00 has been made at an ATM."
-result = nlp(sentence)
-
-# The result is a list of dictionary. Each dictionary contains an entity from the input text, its start and end indices in the text, and its predicted label.
-for entity in result:
-    print("{entity['entity']}: {entity['score']}, {entity['index']}, {entity['start']}, {entity['end']}")
-    print(f"{entity['entity']}: {entity['score']}, {entity['index']}, {entity['start']}, {entity['end']}")
+entities = nlp(sentence)
 
 tag2id = {tag: id for id, tag in enumerate(unique_tags)}
 
 id2tag = {id: tag for tag, id in tag2id.items()}  # reverse the tag2id dictionary
+headers = ["Entity", "Entity label", "Predicted label", "Confidence Score", "Index", "Start", "End"]
+table = [[sentence[entity['start']:entity['end']], entity["entity"], id2tag[int(entity['entity'].split('_')[-1])], entity["score"], entity["index"], entity["start"], entity["end"]] for entity in entities]
 
-for entity in result:
-    print(f"Entity: {sentence[entity['start']:entity['end']]}")
-    print(f"Predicted label: {id2tag[int(entity['entity'].split('_')[-1])]}")
-    print(f"Confidence score: {entity['score']}")
-    print()
+print(tabulate(table, headers, tablefmt="grid"))
