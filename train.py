@@ -2,6 +2,9 @@ import numpy as np
 import torch
 from torch.utils.data import Dataset
 from transformers import DistilBertForTokenClassification, DistilBertTokenizerFast, Trainer, TrainingArguments
+# import csv
+# import json
+# import pandas as pd
 
 class NERDataset(Dataset):
     def __init__(self, encodings, labels):
@@ -41,6 +44,42 @@ tokenizer = DistilBertTokenizerFast.from_pretrained('distilbert-base-uncased')
 "B-atm_id" and "I-atm_id" for the ATM ID.
 "B-" and "I-" prefixes are standard in NER and stand for "Beginning" and "Inside". They indicate that a particular token is the start of an entity or inside an entity. A single-token entity would be labeled with "B-" prefix.
 """
+
+# Note: uncomment below use-case option for your train data
+
+# # Option 1: CSV file using native csv module
+# csv_file_path = "path/to/your/csv/train.csv"
+# with open(csv_file_path, "r") as f:
+#     csv_reader = csv.reader(f)
+#     texts = []
+#     labels = []
+#     for row in csv_reader:
+#         texts.append(row[0])  # Assuming the text is in the first column
+#         labels.append(row[1])  # Assuming the labels are in the second column
+
+# # Option 2: JSON file
+# json_file_path = "path/to/your/json/train.json"
+# with open(json_file_path, "r") as f:
+#     json_data = json.load(f)
+#     texts = [entry["text"] for entry in json_data]
+#     labels = [entry["labels"] for entry in json_data]
+
+# # Option 3: CSV file using pandas, assuming text and labels are provided as expected
+# csv_file_path = "path/to/your/csv/train.csv"
+# df = pd.read_csv(csv_file_path)
+# texts = df["text"].tolist()
+# labels = df["labels"].tolist()
+
+# # Option 4: JSON file using pandas
+# json_file_path = "path/to/your/json/train.json"
+# with open(json_file_path, "r") as f:
+#     json_data = json.load(f)
+# df = pd.DataFrame(json_data)
+# texts = df["text"].tolist()
+# labels = df["labels"].tolist()
+
+
+
 # Example sentences and corresponding tags
 texts = [
     ["Dear", "Customer", ",", "Greetings", "from", "ICICI", "Bank", "."],
