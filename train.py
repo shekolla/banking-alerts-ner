@@ -2,6 +2,7 @@ import numpy as np
 import torch
 from torch.utils.data import Dataset
 from transformers import DistilBertForTokenClassification, DistilBertTokenizerFast, Trainer, TrainingArguments
+from constants.constants import unique_tags
 # import csv
 # import json
 # import pandas as pd
@@ -33,17 +34,6 @@ def encode_tags(tags, encodings):
 
 # Use a DistilBERT tokenizer
 tokenizer = DistilBertTokenizerFast.from_pretrained('distilbert-base-uncased')
-
-
-"""
-"B-bank" and "I-bank" for the name of the bank.
-"B-currency" and "I-amount" for the amount of money.
-"B-method" for the transaction method (like "ATM").
-"B-card" and "I-card" for the debit card.
-"B-account" and "I-account" for the account number.
-"B-atm_id" and "I-atm_id" for the ATM ID.
-"B-" and "I-" prefixes are standard in NER and stand for "Beginning" and "Inside". They indicate that a particular token is the start of an entity or inside an entity. A single-token entity would be labeled with "B-" prefix.
-"""
 
 # Note: uncomment below use-case option for your train data
 
@@ -97,8 +87,6 @@ tags = [
     ["O", "O", "B-atm_id", "I-atm_id", "I-atm_id", "I-atm_id", "I-atm_id", "O"],
     ["O", "O", "O", "O", "O", "B-account", "O", "B-currency", "I-amount", "O"]
 ]
-
-unique_tags = ['O', 'B-bank', 'I-bank', 'B-currency', 'I-amount', 'B-method', 'B-card', 'I-card', 'B-account', 'I-account', 'B-atm_id', 'I-atm_id']
 
 tag2id = {tag: id for id, tag in enumerate(unique_tags)}
 

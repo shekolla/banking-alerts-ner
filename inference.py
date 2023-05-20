@@ -1,5 +1,6 @@
 from transformers import pipeline
 from transformers import DistilBertForTokenClassification, DistilBertTokenizerFast
+from constants.constants import unique_tags
 
 # Load the model
 model = DistilBertForTokenClassification.from_pretrained("text_finance_tag")
@@ -18,8 +19,6 @@ result = nlp(sentence)
 for entity in result:
     print("{entity['entity']}: {entity['score']}, {entity['index']}, {entity['start']}, {entity['end']}")
     print(f"{entity['entity']}: {entity['score']}, {entity['index']}, {entity['start']}, {entity['end']}")
-
-unique_tags = ['O', 'B-bank', 'I-bank', 'B-currency', 'I-amount', 'B-method', 'B-card', 'I-card', 'B-account', 'I-account', 'B-atm_id', 'I-atm_id']
 
 tag2id = {tag: id for id, tag in enumerate(unique_tags)}
 
